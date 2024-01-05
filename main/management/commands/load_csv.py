@@ -15,6 +15,7 @@ class Command(BaseCommand):
         csv_file_path = kwargs['csv_file_path']
 
         with open(csv_file_path, 'r', encoding='utf-8') as file:
+            
             # Read the first row separately to get the header
             header = file.readline().strip()
 
@@ -24,19 +25,21 @@ class Command(BaseCommand):
             # Use the split header as the fieldnames parameter
             reader = csv.DictReader(file, fieldnames=header_fields)
 
-            # Skip the first row as it's already used as field names
-            next(reader, None)
+            # # Skip the first row as it's already used as field names
+            # next(reader, None)
 
             for row in reader:
+
                 # Convert date format from 'MM/DD/YYYY' to 'YYYY-MM-DD'
                 date_of_confirmation = datetime.strptime(row['date_of_confirmation'], '%m/%d/%Y').strftime('%Y-%m-%d')
+
                 # Check if 'date_of_discharge' is not a dash before parsing
                 date_of_discharge = (
                     datetime.strptime(row['date_of_discharge'], '%m/%d/%Y').strftime('%Y-%m-%d')
                     if row['date_of_discharge'] != '-'
                     else None
                 )
-                # Modify the following lines based on your model fields
+
                 CovidCase.objects.update_or_create(
                     case_id=row['case_id'],
                     age=row['age'],
