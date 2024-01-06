@@ -1,12 +1,9 @@
 from django.urls import path
-from rest_framework.routers import SimpleRouter
-from .views import CovidCaseViewSet
+from .views import covid_case_list, covid_case_detail
 
 app_name = 'main'
 
-router = SimpleRouter()
-router.register(r"covid", CovidCaseViewSet)
-
-
-urlpatterns = []
-urlpatterns += router.urls
+urlpatterns = [
+    path('covid/', covid_case_list, name='covidcase-list'),
+    path('covid/<int:pk>/', covid_case_detail, name='covidcase-detail'),
+]

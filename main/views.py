@@ -1,23 +1,52 @@
-from rest_framework.permissions import AllowAny
-from rest_framework.pagination import PageNumberPagination
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 from .models import CovidCase
 from .serializers import CovidCaseSerializer
 from drf_spectacular.utils import extend_schema
 
 
-# Create your views here.
-
+@api_view(['GET', 'POST'])
 @extend_schema(tags=["Covid"])
-class CovidCaseViewSet(ModelViewSet):
+def covid_case_list(request):
     """
-    A ViewSet for interacting with CovidCase instances.
+    List all CovidCases or create a new CovidCase.
+    """
+    if request.method == 'GET':
+        covid_cases = CovidCase.objects.all()
+        serializer = CovidCaseSerializer(covid_cases, many=True)
+        return Response(serializer.data)
 
-    This ViewSet provides CRUD operations (Create, Retrieve, Update, Delete)
-    for the CovidCase model.
+    elif request.method == 'POST':
+        serializer = CovidCaseSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE', 'PATCH'])
+@extend_schema(tags=["Covid"])
+def covid_case_detail(request, pk):
     """
-    authentication_classes = []
-    permission_classes = [AllowAny]
-    pagination_class = PageNumberPagination
-    serializer_class = CovidCaseSerializer
-    queryset = CovidCase.objects.all().order_by("id")
+    Retrieve, update or delete a CovidCase instance.
+    """
+    try:
+        covid_case = CovidCase.objects.get(pk=pk)
+    except CovidCase.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = CovidCaseSerializer(covid_case)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT' or request.method == 'PATCH':
+        serializer = CovidCaseSerializer(covid_case, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        covid_case.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -87,15 +87,21 @@ class CovidCase(models.Model):
         max_length=100,
         verbose_name=_("Residing Location"),
         help_text=_("Format: max-100, required"),
+        blank=True,
+        null=True,
     )
     residing_postal_code = models.CharField(
         max_length=10,
         verbose_name=_("Residing Postal Code"),
         help_text=_("Format: max-10, required"),
+        blank=True,
+        null=True,
     )
     reference_url = models.URLField(
         verbose_name=_("Reference URL"),
         help_text=_("Format: Valid URL, required"),
+        blank=True,
+        null=True,
     )
 
     class Meta:

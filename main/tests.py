@@ -54,7 +54,7 @@ class CovidCaseViewSetTests(APITestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 4)
+        self.assertEqual(len(response.data), 3)
 
     def test_retrieve_covid_case(self):
         url = reverse('main:covidcase-detail', args=[self.covid_case1.id])
@@ -90,7 +90,8 @@ class CovidCaseViewSetTests(APITestCase):
 
     def test_update_covid_case(self):
         url = reverse('main:covidcase-detail', args=[self.covid_case1.id])
-        data = {'age': 67, 'status': 'Discharged'}
+
+        data = {'age': 67, 'status': 'Discharged', 'case_id': 'Case 1'}
 
         response = self.client.patch(url, data, format='json')
 

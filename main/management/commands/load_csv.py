@@ -15,7 +15,7 @@ class Command(BaseCommand):
         csv_file_path = kwargs['csv_file_path']
 
         with open(csv_file_path, 'r', encoding='utf-8') as file:
-            
+
             # Read the first row separately to get the header
             header = file.readline().strip()
 
