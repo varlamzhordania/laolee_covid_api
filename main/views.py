@@ -4,6 +4,55 @@ from rest_framework import status
 from .models import CovidCase
 from .serializers import CovidCaseSerializer
 from drf_spectacular.utils import extend_schema
+from django.urls import reverse
+from django.http import JsonResponse
+from django.shortcuts import render
+
+
+def home(request):
+    """
+    Display a list of available API endpoints with methods and descriptions.
+    """
+    endpoints = [
+        {
+            'method': "GET",
+            'endpoint': "/covid/",
+            'hyper_link': reverse('main:covidcase-list'),
+            'description': 'List all CovidCases or create a new CovidCase.',
+        },
+        {
+            'method': "POST",
+            'endpoint': "/covid/",
+            'hyper_link': reverse('main:covidcase-list'),
+            'description': 'Create a new CovidCase.',
+        },
+        {
+            'method': "GET",
+            'endpoint': "/covid/<int:pk>/",
+            'hyper_link': reverse('main:covidcase-detail', kwargs={'pk': 1}),
+            'description': 'Retrieve a specific CovidCase instance.',
+        },
+        {
+            'method': "PUT",
+            'endpoint': "/covid/<int:pk>/",
+            'hyper_link': reverse('main:covidcase-detail', kwargs={'pk': 1}),
+            'description': 'Update a specific CovidCase instance.',
+        },
+        {
+            'method': "PATCH",
+            'endpoint': "/covid/<int:pk>/",
+            'hyper_link': reverse('main:covidcase-detail', kwargs={'pk': 1}),
+            'description': 'Partially update a specific CovidCase instance.',
+        },
+        {
+            'method': "DELETE",
+            'endpoint': "/covid/<int:pk>/",
+            'hyper_link': reverse('main:covidcase-detail', kwargs={'pk': 1}),
+            'description': 'Delete a specific CovidCase instance.',
+        },
+    ]
+
+    return render(request, 'index.html', {"data":endpoints})
 
 
 @api_view(['GET', 'POST'])

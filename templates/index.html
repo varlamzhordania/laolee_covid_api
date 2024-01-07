@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Endpoints</title>
+</head>
+<body>
+
+<h2>API Endpoints</h2>
+<hr/>
+<ul>
+    {% for endpoint in data %}
+        <li>
+            <div style="display: flex;gap: 10px">
+                <p><strong>{{ endpoint.method }}</strong></p>
+                <p>{{ request.get_host }}{{ endpoint.endpoint }}</p>
+                <p>{{ endpoint.description }}</p>
+            </div>
+            <a href="{{ endpoint.hyper_link }}">{{ request.get_host }}{{ endpoint.hyper_link }}</a>
+        </li>
+    {% endfor %}
+</ul>
+<hr/>
+</body>
+</html>
